@@ -1,4 +1,4 @@
-What this project all about you ask
+What is this project all about you ask
 
    This project is a proof of concept to see if I could
    create the functionality required and resolve the 
