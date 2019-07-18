@@ -1,0 +1,44 @@
+1. According to bobbytables, the use of DBIx::Class will handle SQLinjection
+   efforts.
+
+2. UTF-8 , Taint SQLite3
+up.conf
+  DBEXTRA => { sqlite_unicode => 1, TAINT => 1 },
+
+lib/Up.pm
+      $schema = Up::Schema->connect( $config->{DSN},     $config->{USER},
+                                     $config->{PASSWORD},
+                                     $config->{DBEXTRA},
+                                   );
+
+3. Cross-Site Scripting (XSS) attacks
+      Using Mojolicious
+          Mojolicious:Guides:Rendering
+             Cross-site request forgery
+CSRF is a very common attack on web applications that trick your logged in users to submit forms they did not intend to send, with something as mundane as a link. All you have to do, to protect your users from this, is to add an additional hidden field to your forms with "csrf_field" in Mojolicious::Plugin::TagHelpers, and validate it with "csrf_protect" in Mojolicious::Validator::Validation.
+
+  @@ target.html.ep
+  <!DOCTYPE html>
+  <html>
+    <body>
+      ...
+        %= csrf_field
+      ...
+    </body>
+  </html>
+
+in your controller subroutine
+    # Check CSRF token
+    my $v = $self->validation;
+    return $self->render(text => 'Bad CSRF token!', status => 403)
+      if $v->csrf_protect->has_error('csrf_token');
+
+NOTE: Does NOT work in a TemplateToolkit templates!!
+         Their hint of 
+            <input name="csrf_token" type="hidden" value="fa6a08...">
+         did not work in TemplateToolkit
+      MUST use Mojolicious' Embedded Perl templates!!!
+
+oooh noooo!
+   Mojolicious::Plugin::CSRFDefender gets you over the Template Toolkit
+   opportunity!!!

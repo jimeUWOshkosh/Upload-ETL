@@ -1,0 +1,10 @@
+# config-file-type: JSON 1
+{
+    "db" : [
+       "DBI:SQLite:dbname=db/up.db",
+       "",
+       "",
+    ],
+    "dbvendor" : "SQLite",
+    "ProjSchema" : "Up::Schema",
+}

@@ -1,0 +1,7 @@
+% layout 'mylayout';
+<H1>Display File</H1>
+<H2>
+<%== $filen %>
+</H2>
+<%== $txt %>
+<a href="/">Back to Main Upload Menu</a>

@@ -1,0 +1,19 @@
+[%
+    WRAPPER 'layouts/basic.html.tt'
+%]
+<h2>File(s) Uploaded</h2>
+<p>Choose An Upload to view</p>
+<form method="post" action="displaydataset" name="form1" enctype="multipart/form-data">
+  <INPUT TYPE="hidden" NAME="type" VALUE="transfer">
+  <select name="listname"  size="[% size %]">
+    [% FOREACH option = dataset %]
+      <option value="[% option.file_id %]">[% option.desc %]</option>
+    [% END %]
+  </select>
+  <br> </br>
+  <input type="submit" name="Display" value="Display" />
+  <input name="csrf_token" type="hidden" value="fa6a08..." />
+</form>
+<br> </br>
+<a href="/">Upload Menu</a>
+[% END %]

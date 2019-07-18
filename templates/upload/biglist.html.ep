@@ -1,0 +1,16 @@
+% layout 'mylayout';
+<h2>File(s) Uploaded</h2>
+<p>Choose An Upload to view</p>
+   <form action="displaydataset" name="form1" method="POST" enctype="multipart/form-data">
+  <INPUT TYPE="hidden" NAME="type" VALUE="transfer">
+     %= csrf_field
+  <select name="listname"  size="<%= $size %>">
+     % for my $i (@$dataset) {
+        <option value="<%= $i->{file_id} %>"><%= $i->{desc} %></option>
+     % }
+  </select>
+  <br> </br>
+  <input type="submit" name="Display" value="Display" />
+</form>
+<br> </br>
+<a href="/">Back to Main Upload Menu</a>

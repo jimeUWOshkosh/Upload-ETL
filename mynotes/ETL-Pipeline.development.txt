@@ -1,0 +1,29 @@
+ETL-Pipeline Development
+
+Could not find examples program on the internet.
+Had to go by the POD and test programs 
+
+1) Input to ETL::P
+
+   Modified ETL/Pipeline/Input/DelimitedText.pm to
+            {$PROJECT}/lib/Local/DelimitedTextUnicode.pm 
+     Text::CSV::Unicode
+
+2) Output 
+
+   Could not find and example for a SQL module!
+
+   Followed the POD and lib/ETL/Pipeline/Output/Perl.pm
+
+   'configure' method 
+      b) inserts uploaded file info into 'dataset' table
+
+   'write_record' method
+      a) inserts the worksheet into the 'datasheet' table
+         with the first row of data
+         Note: CSV files are considered to have one worksheet
+      b) makes adjustments to the data
+      c) inserts uploaded file data into 'data' table
+
+   Placed my output modules in {$PROJECT}/lib/Local.
+   

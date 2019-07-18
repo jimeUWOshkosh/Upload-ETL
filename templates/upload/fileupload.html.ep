@@ -1,0 +1,10 @@
+% layout 'mylayout';
+<p>Choose file(s) to upload</p>
+   <form action="ProcessFiles" name="form1" method="POST" enctype="multipart/form-data">
+     %= csrf_field
+     <input name="files" type="file" enctype="multipart/form-data" 
+           accept=".csv, .xls, .xlsx" multiple/>
+     <button name="upload" type="submit">Upload</button>
+   </form>
+<br> </br>
+<a href="/">Back to Main Upload Menu</a>

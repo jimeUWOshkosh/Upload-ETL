@@ -1,0 +1,10 @@
+DROP TABLE IF EXISTS data;
+CREATE TABLE IF NOT EXISTS data (
+       data_id   INTEGER PRIMARY KEY AUTOINCREMENT,
+       file_id  INTEGER not null references dataset(file_id),
+       sheet_id INTEGER not null references datasheet(sheet_id),
+       row_indx INTEGER not null,
+       name     TEXT    not null,
+       age      INTEGER not null,
+       utf      TEXT    not null
+);

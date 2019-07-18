@@ -1,0 +1,6 @@
+DROP TABLE IF EXISTS dataset;
+CREATE TABLE IF NOT EXISTS dataset (
+       file_id INTEGER PRIMARY KEY AUTOINCREMENT,
+       file    TEXT not null,
+       transaction_date    TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

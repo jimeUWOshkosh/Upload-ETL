@@ -1,0 +1,13 @@
+% layout 'mylayout';
+<TABLE BORDER="1">
+  <TR><TH>File</TH><TH>Size</TH></TR>
+     % for my $fi (@$files) {
+        <TR>
+           <TD><%= $fi->{name} %></TD><TD><%= $fi->{size} %></TD>
+        </TR>
+     % }
+</TABLE>
+<br></br>
+<a href="/FileUpload">Upload an Additional CSV/Excel File</a>
+<br></br>
+<a href="/">Back to Main Upload Menu</a>

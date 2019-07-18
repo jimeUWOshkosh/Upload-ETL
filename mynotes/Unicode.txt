@@ -1,0 +1,41 @@
+CSV
+   Input
+      use Text::CSV::Unicode;
+   Output
+      use utf8::all;
+
+XLSX
+   Output
+      Had to decode all text field just before inserting into the database
+
+      use Encode qw(decode encode);
+      $ra_rec->{utf}  = decode( 'UTF-8', $ra_rec->{utf},  Encode::FB_CROAK );
+
+SQLite
+   Mojolicious
+      up.conf
+         DBEXTRA => { sqlite_unicode => 1 },
+
+      lib/Up.pm
+         $schema = Up::Schema->connect( $config->{DSN},     $config->{USER},
+                                        $config->{PASSWORD},
+                                        $config->{DBEXTRA},
+                                      );
+
+---- old notes that are no longer valid for this project -----
+
+XLS (xls2csv)
+   use Spreadsheet::ParseExcel;
+   # Didn't have to use a formatter
+   $cell->value
+
+   Please read mynotes/Spreadsheet.txt for issues related to spreadsheet modules &
+   ETL::Pipeline and Unicode
+
+XLSX (xlsx2csv)
+   Spreadsheet::ParseXLSX
+   $cell->unformatted
+
+   Please read mynotes/Spreadsheet.txt for issues related to spreadsheet modules &
+   ETL::Pipeline and Unicode
+

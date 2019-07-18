@@ -1,0 +1,28 @@
+*Issues with ETL::Pipeline off the CPAN vine*
+
+1. $ perl Makefile.PL
+   whines about 'automanifest' with strict;
+
+    no strict;
+    automanifest;
+    use strict;
+
+2. string variable interpolation line 1120 ETL::Pipeline
+
+    $class = "ETL::Pipeline::$action::$class";
+
+    $class = "ETL::Pipeline::${action}::$class";
+    # a colon a new letter in a variable name????!!!!
+
+   Note: before $ make test 
+         You want to make sure you pass the tests!!!
+
+3. Did not want status print statements from ETL::Pipeline
+   so I commented out 'say's in ETL::Pipeline.pm before
+   installing the package ( before make install ).
+
+   Did not want them bothering Mojolicious.
+
+4.  When I place my '+Local' modules in {$PROJECT}/lib/Local. 
+    You can NOT have sub-directories!
+

@@ -1,0 +1,12 @@
+% layout 'mylayout';
+<FORM ACTION="UploadMenuChose" name="form1" METHOD="POST">
+     %= csrf_field
+  <select name=select SIZE=2>
+    <option value=file_upload>Upload CSV/Excel</option>
+    <option value=biglist>View Uploaded Files</option>
+  </select>
+  <br></br>
+  <INPUT TYPE="submit" name="Enter" VALUE="Enter">
+</FORM>
+<br></br>
+<a href="/">Upload Menu</a>

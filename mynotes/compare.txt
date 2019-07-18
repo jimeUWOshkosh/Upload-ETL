@@ -1,0 +1,28 @@
+ETL::Yertl
+   Good
+    CSV,JSON,YAML
+   Bad
+    No Unicode
+
+   I have tools for XLS, XLSX to CSV
+      Side Notes: these do Unicode
+
+ETL::Pipeline
+   Bad
+      The project is not being maintained
+   Good
+     Does CSV, Excel (XLS,XLSX), XML
+   Bad
+     One line change for Unicode in CSV (DelimitedText.pm).
+     XLSX: I had to 'decode' text fields for the Unicode
+           characters to get into the database in my
+           Output packages.
+   ???
+     Haven't tested Unicode in XML
+
+   Options
+      1) Place ETL::Pipeline in your project
+            No major issues
+      2) Place ETL::Pipeline in your system's wide perl
+            if you create '+Local' packages in 'lib/Local' 
+            you can not have sub-directories!

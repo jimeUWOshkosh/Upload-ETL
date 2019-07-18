@@ -1,0 +1,7 @@
+DROP TABLE IF EXISTS datasheet;
+CREATE TABLE IF NOT EXISTS datasheet (
+       sheet_id   INTEGER PRIMARY KEY AUTOINCREMENT,
+       file_id    INTEGER not null references dataset(file_id),
+       sheet_indx INTEGER not null,
+       sheet_name TEXT    not null
+);

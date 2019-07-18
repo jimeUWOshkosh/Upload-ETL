@@ -1,0 +1,13 @@
+[% 
+    WRAPPER 'layouts/basic.html.tt' 
+%]
+<p>Choose file(s) to upload</p>
+   <form action="ProcessFiles" name="form1" method="POST" enctype="multipart/form-data">
+     <input name="files" type="file" enctype="multipart/form-data" 
+           accept=".csv, .xls, .xlsx" multiple/>
+     <button name="upload" type="submit">Upload</button>
+     <input name="csrf_field" type="hidden" value="fa6a08..." />
+   </form>
+<br> </br>
+<a href="/">Upload Menu</a>
+[% END %]

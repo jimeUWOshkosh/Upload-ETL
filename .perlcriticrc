@@ -1,0 +1,64 @@
+# https://perlmaven.com/getting-started-with-perl-critic
+# https://www.capside.com/labs/perlcritic-safe-perl
+# http://blogs.perl.org/users/ovid/2010/11/vims-quickfix-mode-and-perl.html
+# color screws up using :cf and :cn
+#color = brutal
+severity = 1
+verbose =%f:%l:%m[%p]\n
+theme = core
+#color-severity-highest = bold red
+#color-severity-high    = yellow
+#color-severity-medium  = bold blue
+#color-severity-low     = blue
+#color-severity-lowest  = magenta
+
+# -----------------
+# - Core policies -
+# -----------------
+
+[Modules::ProhibitEvilModules]
+modules_file = /home/devel/.forbidden_modules
+#modules_file = .forbidden_modules WANTS TO BE IN THE CURRENT DIRECTORY
+#modules_file = ~/.forbidden_modules DOES NOT WORK
+#modules_file = $HOME/.forbidden_modules DOES NOT WORK
+
+# Always use strict
+[TestingAndDebugging::RequireUseStrict]
+severity           = 5
+# Some modules enable strict automatically, so no need to enforce it
+equivalent_modules = Moo Moose Moo::Role Moose::Role strictures common::sense
+# Use of 'no strict' is forbidden
+[TestingAndDebugging::ProhibitNoStrict]
+
+[TestingAndDebugging::RequireUseWarnings]
+severity           = 5
+# Some modules enable warnings utomatically, so no need to enforce it
+equivalent_modules = Moo Moose Moo::Role Moose::Role strictures
+# Use of 'no warnings' is forbidden
+[TestingAndDebugging::ProhibitNoWarnings]
+
+
+# Do NOT enforce these rules
+#[-Subroutines::RequireArgUnpacking]
+[-ValuesAndExpressions::ProhibitMagicNumbers]
+[-Documentation::PodSpelling]
+[-Documentation::RequirePodAtEnd]
+[-Documentation::RequirePodSections]
+[-ControlStructures::ProhibitPostfixControls]
+[-RegularExpressions::RequireDotMatchAnything]
+[-RegularExpressions::RequireExtendedFormatting]
+[-RegularExpressions::RequireLineBoundaryMatching]
+[-BuiltinFunctions::ProhibitStringyEval]
+[-Miscellanea::ProhibitUnrestrictedNoCritic]
+[-Modules::RequireExplicitPackage]
+[-InputOutput::ProhibitBacktickOperators]
+[-Modules::RequireNoMatchVarsWithUseEnglish]
+[-RegularExpressions::ProhibitEscapedMetacharacters]
+[-ValuesAndExpressions::ProhibitNoisyQuotes]
+[-ValuesAndExpressions::ProhibitEmptyQuotes]
+[-Subroutines::ProhibitSubroutinePrototypes]
+[-Variables::ProhibitPackageVars]
+[-ValuesAndExpressions::ProhibitLongChainsOfMethodCalls]
+[-References::ProhibitDoubleSigils]
+[-Modules::ProhibitAutomaticExportation]
+[-NamingConventions::Capitalization]

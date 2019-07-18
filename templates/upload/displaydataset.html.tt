@@ -1,0 +1,10 @@
+[%
+    WRAPPER 'layouts/basic.html.tt'
+%]
+<H1>Display File</H2>
+<H2>
+[% $filen %]
+</H2>
+[% txt %]
+<a href="/">Upload Menu</a>
+[% END %]

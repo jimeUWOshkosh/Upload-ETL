@@ -1,0 +1,255 @@
+%title: Web App with ETL
+%author: James Edwards
+%date: 2019-19-June
+
+-> Extract, Transform and Load: Slide 1 <-
+=========
+
+Have been working on this side project for a while 
+(always looking for something kool to present
+ to the MadMongers)
+and thought I would look at the ETL portion. 
+
+I found ETL::Pipeline.
+
+One bad thing, it hasn't compiled successfully since
+mar-2016. More about the later
+
+-------------------------------------------------
+
+-> # ETL : Slide 2 <-
+
+Curtis Poe’s Linkedin blog 7-mar-2018
+   [Building a Software Consulting Firm](https://www.linkedin.com/pulse/building-software-consulting-firm-curtis-poe/)
+
+Job Test : We create software tests which are small applications related to our problem domain.
+They can easily be done in under a day.
+
+ETL
+
+... create a simple test where the candidate needs to build a simple web application to 
+upload a CSV or Excel file and store the results in a properly designed SQLite database. 
+The application must then show a page where the customer can select an upload for viewing. 
+We skip authentication, authorization, or any of a number of things we'd like to include 
+because giving the candidate too much in one test isn't fair.
+
+-------------------------------------------------
+
+-> # ETL : Slide 3 <-
+
+I saw Mr. Poe’s blog entry and thought I like to solve the projects issues of
+      XSS injection attacks
+      Unicode
+      SQL injection attacks
+
+I don’t have the sample input files to play with but I can put data into a 'properly normalize schema'
+using some employee data.
+
+-------------------------------------------------
+
+-> # ETL: More Ovid ETL : Slide 4 <-
+
+You may wish to also read
+   [Alan Kay and Missing Messages](https://ovid.github.io/articles/alan-kay-and-missing-messages-a-follow-up.html)
+
+-------------------------------------------------
+
+-> # ETL : SQL/XSS Injection Attacks : Slide 4 <-
+
+SQL
+   According to bobbytables, the use of DBIx::Class will handle SQL injection
+   efforts.
+
+XSS
+   Use Mojolicious
+         Mojolicious:Guides:Rendering
+             Cross-site request forgery
+CSRF is a very common attack on web applications that trick your logged in users to 
+submit forms they did not intend to send, with something as mundane as a link. All 
+you have to do, to protect your users from this, is to add an additional hidden 
+field to your forms with "csrf_field" in Mojolicious::Plugin::TagHelpers, and 
+validate it with "csrf_protect" in Mojolicious::Validator::Validation.
+
+-------------------------------------------------
+
+-> # ETL : XSS Injection Attacks : Continue : Slide 5 <-
+
+  @@ target.html.ep
+  <!DOCTYPE html>
+  <html>
+    <body>
+      ...
+        %= csrf_field
+      ...
+    </body>
+  </html>
+
+in your controller subroutine
+
+    # Check CSRF token
+    my $v = $self->validation;
+    return $self->render(text => 'Bad CSRF token!', status => 403)
+      if $v->csrf_protect->has_error('csrf_token');
+
+-------------------------------------------------
+
+-> # ETL : XSS Injection Attacks : Continue : Slide 6 <-
+
+NOTE: Does NOT work in a TemplateToolkit templates!!
+         They're hint of
+            <input name="csrf_token" type="hidden" value="fa6a08">
+         Did NOT either
+
+Found Mojolicious::Plugin::CSRFDefender
+  When the application response body contains form tags with method="post", 
+  this inserts hidden input tag that contains token string into forms in 
+  the response body
+
+   $length defaults to 32
+   $token = String::Random::random_regex("[a-zA-Z0-9_]{$length}");
+
+-------------------------------------------------
+
+-> # ETL : Unicode: ETL::Pipeline : Slide 7 <-
+
+ETL::Pipeline uses
+   Text::CSV
+   Spreadsheet::Parse
+   Spreadsheet::XLSX
+
+Perl Maven ~ Dec-2016
+[How to read an Excel file in Perl](https://perlmaven.com/read-an-excel-file-in-perl)
+...There is also Spreadsheet::XLSX, but as far as I can tell that's not recommended any more. 
+
+-------------------------------------------------
+
+-> # ETL : Unicode: ETL::Pipeline : Slide 8 <-
+
+CSV
+   ETL::Pipeline::Input::DelimitedText.pm
+      Copied DelimitedText.pm to DelimitedTextUnicode.pm
+      Migrated Test::CSV to Text::CSV::Unicode for UTF8
+XLSX
+   Input  --  ETL::Pipeline::Input::Excel.pm
+      Spreadsheet::Parse works fine. 
+   Output -- ETL::Pipeline::Output::XLSX::EE1 is my module
+      It needed all the text fields decoded
+         $ra_rec->{name} = decode( 'UTF-8', $ra_rec->{name}, Encode::FB_CROAK );
+      Note: 'EE1' name would be for Employee Records from Client #1
+XLS
+   Input  --  ETL::Pipeline::Input::Excel.pm
+      Spreadsheet::Parse works fine. 
+   Output -- ETL::Pipeline::Output::XLS::EE1 is my module
+      No formatting or decoding
+
+-------------------------------------------------
+
+-> # ETL : Unicode : Continue : Slide 9 <-
+
+SQL
+  up.conf
+
+  DBEXTRA => { sqlite_unicode => 1, Taint => 1 },
+
+
+
+  $schema = Up::Schema->connect( $config->{DSN},     $config->{USER},
+                                 $config->{PASSWORD},
+                                 $config->{DBEXTRA},
+
+Depending on how you are catching errors, you should review other 'connect' options
+
+  DBEXTRA => { sqlite_unicode => 1, Taint => 1,      AutoCommit => 1,         PrintWarn => 1, 
+               PrintError => 1,     RaiseError => 1, ShowErrorStatement => 1, },
+
+-------------------------------------------------
+
+-> # ETL : ETL::Pipeline Issues : Slide 10 <-
+
+*Issues with ETL::Pipeline off the CPAN vine*
+
+1. $ perl Makefile.PL
+   whines about 'automanifest' with strict;
+
+    no strict;
+    automanifest;
+    use strict;
+
+2. string variable interpolation line 1120 ETL::Pipeline
+
+    $class = "ETL::Pipeline::$action::$class";
+
+    $class = "ETL::Pipeline::${action}::$class";
+    # a colon a new letter in a variable name????!!!!
+
+-------------------------------------------------
+
+-> # ETL : ETL::Pipeline : Slide 11 <-
+
+I started by installing ETL::Pipeline into the project, not into my system wide
+perlbrew.  
+
+From ETL:P POD
+    Technical Note: Want to use a custom class from Local instead of
+    ETL::Pipeline::(Input|Output), Put a + (plus sign) in front of the class name.
+    For example, this command uses the input class Local::CustomExtract.
+
+      $pipeline->input( '+Local::CustomExtract' );
+      $pipeline->output( '+Local::CustomLoad' );
+
+I placed my ETL:P Input,Output modules in {$PROJECT}/lib/Local. 
+Note: You can not have any sub-directories in 'Local'.
+
+-------------------------------------------------
+
+-> # ETL : ETL::Pipeline : System Wide perl: Slide 12 <-
+
+As my system superuser
+  1. Pointed my shell env to point to perlbrew
+  2. Clone the project
+  3. Read README
+  4. Repair Makefile.PL ## slide 10
+  5. $ perl Makefile.PL
+  6. $ make
+  7. $ make test
+  8. Repair Pipeline.pm  ## see slide 10
+  9. Comment out 'say's in Pipeline.pm
+ 10. $ make test
+ 11. $ make install
+
+-------------------------------------------------
+
+-> # ETL : ETL::Pipeline::Output to RDBMS : Slide 13 <-
+
+In my modules, Local::EE*001.pm
+
+To pass in the Database handle HASH, I made it an atttribute
+to the package's Moose Object. Now I have only one DB connection
+per web apllication
+
+-------------------------------------------------
+
+-> # ETL : ETL::Pipeline : Slide 14 <-
+
+While I was debugging in a small sample size of input,
+I noticed the input object passed to the output process
+had all of the input records in it.
+
+-------------------------------------------------
+
+-> # ETL : ETL::Pipeline : Slide 15 <-
+
+The advantages I see 
+1. Chaining multiple inputs. See ETL::Pipeline POD
+2. Can process XML
+
+You could probably create JSON/YAML module
+
+ETL:P did NOT give me that much of a bang for the buck. 
+I could of wrote something quicker. 
+(There was no examples on the web. Just POD and test programs)
+
+Hopefully I can spend more time with the POD and see if there 
+is more stuff to uncover.  Since your input/out modules are 
+Moose objects theres more fun to be had
+

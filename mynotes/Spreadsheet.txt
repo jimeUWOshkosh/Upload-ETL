@@ -1,0 +1,43 @@
+Starting with
+   Perl Maven
+      How to read an Excel file in Perl
+---
+ Then there are the low-level libraries reading files by different versions of 
+Excel: Spreadsheet::ParseExcel can read Excel 95-2003 files, and 
+Spreadsheet::ParseXLSX can read file in the Excel 2007 Open XML XLSX format. 
+There is also Spreadsheet::XLSX, but as far as I can tell that's not 
+recommended any more.
+
+In addition there is also Spreadsheet::ParseExcel::Simple that works at an 
+abstraction level somewhere between the above two, but it has not been changes 
+for quite some time and I am not sure if it is necessary at all. 
+------------
+
+
+ETL::Pipeline
+   uses Text::CSV, Spreadsheet::ParseExcel and Spreadsheet::XLSX
+
+   According to Spreadsheet::ParseXLSX's POD
+      # see Spreadsheet::ParseExcel for further documentation
+
+      But then a module inside of ETL::Pipeline could not open the file.
+----------
+
+Final output struggle 
+
+CSV
+   Copied ETL:P::Input::DelimitedText.pm to DelimitedTextUnicode.pm
+   Change Text::CSV to Text::CSV::Unicode
+
+XLS/XLSX
+   Input
+      ETL:P::Input::Excel.pm worked fine
+   Output
+      XLSX had to use Encode's decode on text attribute before inserting
+         into the database.
+
+Input
+   Created data files (CSV, XLS, XLSX) to have employee-ish kinda of info.
+Output
+   Had to create my own output modules to insert into my data specific
+   layout to hold employee-ish kind of info

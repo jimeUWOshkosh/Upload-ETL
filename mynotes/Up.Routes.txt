@@ -1,0 +1,49 @@
+--- User sent to /uploadmenu as the home --------------------------------
+
+get /             	Controller/Upload.pm->sub menu
+put /uploadmenu   	Controller/Upload.pm->sub menu
+
+Controller::Upload.pm|sub menu   render templates/upload/menu.html
+
+t/upload/menu.html
+	Action	UploadMenuChose
+		file_upload
+		list
+
+post UploadMenuChose	Controller/Upload.pm->sub MenuChose
+
+Controller::Upload.pm|sub MenuChose
+	file_upload	-> FileUpload
+	list		-> biglist
+
+--- User choose to upload file(s) to the server
+
+get(FileUpload)		Controller/Upload.pm->sub FileUpload
+
+Controller::Upload.pm|sub FileUpload	render templates/upload/FileUpload.html
+
+t/upload/FileUpload.html
+	Action	ProcessFiles
+
+post(ProcessFiles)    	Controller/Upload.pm->sub ProcessFiles
+
+Controller::Upload.pm|sub ProcessFiles   render templates/upload/displayupload.html
+
+--- End of Uploading file(s) ---------------------------------------------
+
+
+
+--- User choose to see a list of download and view the contents -----------
+
+get(biglist)     	Controller/Upload.pm->sub biglist
+
+Controller::Upload.pm|sub biglist      	render templates/upload/biglist.html
+
+t/upload/biglist.html
+	Action	displaydataset
+
+get(displaydataset)    	Controller/Upload.pm->sub displaydataset
+
+Controller::Upload.pm|sub displaydataset  render templates/upload/displaydataset.html
+
+--- End of Viewing a file/dataset ------------------------------------------

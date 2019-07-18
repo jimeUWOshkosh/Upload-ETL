@@ -1,0 +1,23 @@
+How to go from SQL to using DBIx::Class:DeploymentHandler scripts
+
+$ rm db/up.db
+$ sqlite3 db/up.db <db/create.sql
+$ cd lib/{PROJECT}
+$ rm -rf Schema Schema.pm
+$ cd ../..
+$ bash db/dbicdump.sh
+
+$ vi lib/Up/Schema.pm
+   insert 
+
+our $VERSION = 1;
+
+   in the modify section
+
+$ bash myscripts/dcdh/restart.sh
+$ sqlite3 db/up.db <db/drop.sql
+$ perl myscripts/dcdh/01_prepare_init.pl
+$ perl myscripts/dcdh/02_init.pl
+
+Note: If you wish find out more about the DeploymentHandler scripts,
+      please read myscripts/dbdh/README

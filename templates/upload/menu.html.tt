@@ -1,0 +1,15 @@
+[% 
+    WRAPPER 'layouts/basic.html.tt' 
+%]
+<FORM ACTION="UploadMenuChose" name="form1" METHOD="POST">
+  <select name=select SIZE=2>
+    <option value=file_upload>Upload CSV/Excel</option>
+    <option value=biglist>View Uploaded Files</option>
+  </select>
+  <br></br>
+  <INPUT TYPE="submit" name="Enter" VALUE="Enter">
+  <input name="csrf_token" type="hidden"value="fa6a08..." />
+</FORM>
+<br></br>
+<a href="/">Upload Menu</a>
+[% END %]

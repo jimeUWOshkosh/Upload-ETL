@@ -1,0 +1,16 @@
+[%
+    WRAPPER 'layouts/basic.html.tt'
+%]
+<TABLE BORDER="1">
+  <TR><TH>File</TH><TH>Size</TH></TR>
+  [% FOREACH fi IN files %]
+    <TR>
+      <TD>[% fi.name %]</TD><TD>[% fi.size %]</TD>
+    </TR>
+   [% END %]
+</TABLE>
+<br></br>
+<a href="/FileUpload">Upload CSV/Excel</a>
+<br></br>
+<a href="/">Upload Menu</a>
+[% END %]
